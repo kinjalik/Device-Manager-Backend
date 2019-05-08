@@ -24,7 +24,7 @@ app.get('/api', function (req, res) {
     res.send('API is running');
 });
 
-app.listen(1337, function(){
+app.listen(process.env.PORT || 1337, function(){
     log.info('Express server listening on port 1337');
 });
 
