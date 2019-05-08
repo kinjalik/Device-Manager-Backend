@@ -33,11 +33,11 @@ const db = require("./libs/database.js");
 app.get('/api/users', async (req, res, next) => {
     try {
         qres = await db.User.get();
+        res.send(qres);
     } catch (err) {
         next(err)
         return;
     }
-    res.send({result: qres });
 });
 
 app.post('/api/users', async (req, res, next) => {
@@ -53,20 +53,98 @@ app.post('/api/users', async (req, res, next) => {
 
 app.get('/api/users/:id', async (req, res, next) => {
     try {
-        qres = await db.User.get(req.params.id);
+        console.log(req.query);
+        if (req.query.password)
+            qres = await db.User.get(req.params.id, req.query.password);
+        else
+            qres = await db.User.get(req.params.id);
     } catch (err) {
         next(err)
         return;
     }
-    res.send({ result: qres });
-});
-
-app.put('/api/users/:id', function (req, res) {
-    // NOT IMPLEMENTED
+    res.send(qres);
 });
 
 app.delete('/api/users/:id', function (req, res) {
-    // NOT IMPLEMENTED
+    if (db.User.delete(req.params.id, req.query.password)) {
+        res.send({result: "User Deleted Succesfully"});
+    } else {
+        res.send({result: "Error while deleting"});
+    }
+});
+
+app.get('/api/users/:uid/devices', async (req, res, next) => {
+    try {
+        qres = await db.Device.get(req.params.uid);
+    res.send(qres);
+    } catch (err) {
+        next(err)
+        return;
+    }
+});
+
+app.get('/api/users/:uid/devices/:did', async (req, res, next) => {
+    try {
+        qres = await db.Device.get(req.params.uid, req.params.did);
+        res.send(qres);
+    } catch (err) {
+        next(err);
+        return;
+    }
+});
+
+app.post('/api/users/:uid/devices', async (req, res, next) => {
+    const obj = req.query;
+    obj.owner_id = req.params.uid;
+    const device = new db.Device(obj);
+    try {
+        const newDevice = await device.submit();
+        res.send(newDevice);
+    } catch (err) {
+        next(err);
+        return;
+    }
+})
+
+app.delete('/api/users/:uid/devices/:did', async (req, res, next) => {
+    if (await db.Device.delete(req.params.uid, req.params.did, req.query.password)) {
+        res.send({ result: "Device Deleted Succesfully" });
+    } else {
+        res.send({ result: "Error while deleting" });
+    }
+});
+
+app.get('/api/users/:uid/devices/:did/props', async (req, res, next) => {
+    try {
+        qres = await db.DeviceProp.get(req.params.did);
+        res.send(qres);
+    } catch (err) {
+        next(err);
+        return;
+    }
+});
+
+app.post('/api/users/:uid/devices/:did/props', async (req, res, next) => {
+    const obj = req.query;
+    obj.device_id = req.params.did;
+    const deviceProp = new db.DeviceProp(obj);
+    try {
+        const newDeviceProp = await deviceProp.submit();
+        res.send(newDeviceProp);
+    } catch (err) {
+        next(err);
+        return;
+    }
+});
+
+app.delete('/api/users/:uid/devices/:did/props/:pid', async (req, res, next) => {
+    try {
+        await db.DeviceProp.delete(req.params.uid, req.params.did, req.params.pid, req.query.password)
+        res.send({ result: "Device Property deleted succesfully" });
+    } catch (err) {
+        next(err);
+        return;
+    }
 });
 
 // 404 Handler
