@@ -31,12 +31,21 @@ class User {
             return r;
         } else if (!passwd) {
             log.debug("User.get w ID called");
-            const r = (await client.query("SELECT * FROM public.users WHERE id = $1", [id])).rows[0];
+            let r;
+            if (isNumber(id))
+                r = (await client.query("SELECT * FROM public.users WHERE id = $1", [id])).rows[0];
+            else
+                r = (await client.query("SELECT * FROM public.users WHERE login = $1", [id])).rows[0];
+            
             delete r.hashed_password;
             return r;
         } else {
             log.debug("User.get w/ ID, w/ passwd called");
-            const r = (await client.query("SELECT * FROM public.users WHERE id = $1", [id])).rows[0];
+            let r;
+            if (isNumber(id))
+                r = (await client.query("SELECT * FROM public.users WHERE id = $1", [id])).rows[0];
+            else
+                r = (await client.query("SELECT * FROM public.users WHERE login = $1", [id])).rows[0];
             delete r.hashed_password;
             try {
                 r.hasPermit = await this.checkPermit(id, passwd);
@@ -48,6 +57,7 @@ class User {
         }
     }
 
+    
     static async checkExists(id) {
         return (await client.query("SELECT EXISTS (\
   SELECT * FROM users WHERE id = $1 \
@@ -255,6 +265,11 @@ class DeviceProp {
         
     }
 }
+
+function isNumber(s) {
+    return !isNaN(s) ? true : false;
+}
+
 
 module.exports.User = User;
 module.exports.Device = Device;
