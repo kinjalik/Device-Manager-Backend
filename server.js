@@ -20,7 +20,7 @@ app.get('/ErrorExample', function (req, res, next) {
     next(new Error('Not valid name'));
 });
 
-app.get('/api', function (req, res) {
+app.get('/', function (req, res) {
     res.send('API is running');
 });
 
@@ -30,7 +30,7 @@ app.listen(process.env.PORT || 1337, function(){
 
 const db = require("./libs/database.js");
 
-app.get('/api/users', async (req, res, next) => {
+app.get('/users', async (req, res, next) => {
     try {
         qres = await db.User.get();
         res.send(qres);
@@ -40,7 +40,7 @@ app.get('/api/users', async (req, res, next) => {
     }
 });
 
-app.post('/api/users', async (req, res, next) => {
+app.post('/users', async (req, res, next) => {
     const user = new db.User(req.query);
     user.struct.hashed_password = db.User.getHash(req.query.password)
     try {
@@ -51,7 +51,7 @@ app.post('/api/users', async (req, res, next) => {
     }
 });
 
-app.get('/api/users/:id', async (req, res, next) => {
+app.get('/users/:id', async (req, res, next) => {
     try {
         console.log(req.query);
         if (req.query.password)
@@ -65,7 +65,7 @@ app.get('/api/users/:id', async (req, res, next) => {
     res.send(qres);
 });
 
-app.delete('/api/users/:id', function (req, res) {
+app.delete('/users/:id', function (req, res) {
     if (db.User.delete(req.params.id, req.query.password)) {
         res.send({result: "User Deleted Succesfully"});
     } else {
@@ -73,7 +73,7 @@ app.delete('/api/users/:id', function (req, res) {
     }
 });
 
-app.get('/api/users/:uid/devices', async (req, res, next) => {
+app.get('/users/:uid/devices', async (req, res, next) => {
     try {
         qres = await db.Device.get(req.params.uid);
     res.send(qres);
@@ -83,7 +83,7 @@ app.get('/api/users/:uid/devices', async (req, res, next) => {
     }
 });
 
-app.get('/api/users/:uid/devices/:did', async (req, res, next) => {
+app.get('/users/:uid/devices/:did', async (req, res, next) => {
     try {
         qres = await db.Device.get(req.params.uid, req.params.did);
         res.send(qres);
@@ -93,7 +93,7 @@ app.get('/api/users/:uid/devices/:did', async (req, res, next) => {
     }
 });
 
-app.post('/api/users/:uid/devices', async (req, res, next) => {
+app.post('/users/:uid/devices', async (req, res, next) => {
     const obj = req.query;
     obj.owner_id = req.params.uid;
     const device = new db.Device(obj);
@@ -106,7 +106,7 @@ app.post('/api/users/:uid/devices', async (req, res, next) => {
     }
 })
 
-app.delete('/api/users/:uid/devices/:did', async (req, res, next) => {
+app.delete('/users/:uid/devices/:did', async (req, res, next) => {
     if (await db.Device.delete(req.params.uid, req.params.did, req.query.password)) {
         res.send({ result: "Device Deleted Succesfully" });
     } else {
@@ -114,7 +114,7 @@ app.delete('/api/users/:uid/devices/:did', async (req, res, next) => {
     }
 });
 
-app.get('/api/users/:uid/devices/:did/props', async (req, res, next) => {
+app.get('/users/:uid/devices/:did/props', async (req, res, next) => {
     try {
         qres = await db.DeviceProp.get(req.params.did);
         res.send(qres);
@@ -124,7 +124,7 @@ app.get('/api/users/:uid/devices/:did/props', async (req, res, next) => {
     }
 });
 
-app.post('/api/users/:uid/devices/:did/props', async (req, res, next) => {
+app.post('/users/:uid/devices/:did/props', async (req, res, next) => {
     const obj = req.query;
     obj.device_id = req.params.did;
     const deviceProp = new db.DeviceProp(obj);
@@ -137,7 +137,7 @@ app.post('/api/users/:uid/devices/:did/props', async (req, res, next) => {
     }
 });
 
-app.delete('/api/users/:uid/devices/:did/props/:pid', async (req, res, next) => {
+app.delete('/users/:uid/devices/:did/props/:pid', async (req, res, next) => {
     try {
         await db.DeviceProp.delete(req.params.uid, req.params.did, req.params.pid, req.query.password)
         res.send({ result: "Device Property deleted succesfully" });
