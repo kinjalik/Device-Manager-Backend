@@ -48,7 +48,7 @@ class User {
                 r = (await client.query("SELECT * FROM public.users WHERE login = $1", [id])).rows[0];
             delete r.hashed_password;
             try {
-                r.hasPermit = await this.checkPermit(id, passwd);
+                r.hasPermit = await this.checkPermit(r.id, passwd);
             } catch {
                 r.hasPermit = false;
             }
