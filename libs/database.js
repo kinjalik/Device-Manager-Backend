@@ -135,11 +135,7 @@ class User {
 
     validate() {
         return (
-            (this.struct && this.struct.login && this.struct.name && this.struct.surname && this.struct.hashed_password) &&
-            (3 < this.struct.login.length && this.struct.login.length <= 32) &&
-            (3 < this.struct.name.length && this.struct.name.length <= 32) &&
-            (3 < this.struct.surname.length && this.struct.surname.length <= 32) &&
-            (3 < this.struct.email.length && this.struct.email.length <= 32) 
+            (this.struct && this.struct.login && this.struct.name && this.struct.surname && this.struct.hashed_password)
         )
     }
 }

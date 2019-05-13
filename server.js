@@ -41,9 +41,9 @@ app.get('/users', async (req, res, next) => {
 });
 
 app.post('/users', async (req, res, next) => {
-    const user = new db.User(req.query);
+    const user = new db.User(req.body);
     console.log(req.body);
-    user.struct.hashed_password = db.User.getHash(req.query.password)
+    user.struct.hashed_password = db.User.getHash(req.body.password)
     try {
         const newUsr = await user.submit();
         res.send(newUsr);
@@ -54,9 +54,9 @@ app.post('/users', async (req, res, next) => {
 
 app.get('/users/:id', async (req, res, next) => {
     try {
-        console.log(req.query);
-        if (req.query.password)
-            qres = await db.User.get(req.params.id, req.query.password);
+        console.log(req.body);
+        if (req.body.password)
+            qres = await db.User.get(req.params.id, req.body.password);
         else
             qres = await db.User.get(req.params.id);
     } catch (err) {
@@ -67,7 +67,7 @@ app.get('/users/:id', async (req, res, next) => {
 });
 
 app.delete('/users/:id', function (req, res) {
-    if (db.User.delete(req.params.id, req.query.password)) {
+    if (db.User.delete(req.params.id, req.body.password)) {
         res.send({result: "User Deleted Succesfully"});
     } else {
         res.send({result: "Error while deleting"});
@@ -108,7 +108,7 @@ app.post('/users/:uid/devices', async (req, res, next) => {
 })
 
 app.delete('/users/:uid/devices/:did', async (req, res, next) => {
-    if (await db.Device.delete(req.params.uid, req.params.did, req.query.password)) {
+    if (await db.Device.delete(req.params.uid, req.params.did, req.body.password)) {
         res.send({ result: "Device Deleted Succesfully" });
     } else {
         res.send({ result: "Error while deleting" });
@@ -126,7 +126,7 @@ app.get('/users/:uid/devices/:did/props', async (req, res, next) => {
 });
 
 app.post('/users/:uid/devices/:did/props', async (req, res, next) => {
-    const obj = req.query;
+    const obj = req.body;
     obj.device_id = req.params.did;
     const deviceProp = new db.DeviceProp(obj);
     try {
@@ -140,7 +140,7 @@ app.post('/users/:uid/devices/:did/props', async (req, res, next) => {
 
 app.delete('/users/:uid/devices/:did/props/:pid', async (req, res, next) => {
     try {
-        await db.DeviceProp.delete(req.params.uid, req.params.did, req.params.pid, req.query.password)
+        await db.DeviceProp.delete(req.params.uid, req.params.did, req.params.pid, req.body.password)
         res.send({ result: "Device Property deleted succesfully" });
     } catch (err) {
         next(err);
