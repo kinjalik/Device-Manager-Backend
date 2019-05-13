@@ -78,6 +78,7 @@ class User {
 
     static getHash(passwd) {
         log.debug("User.getHash called");
+        log.debug("Passwd: " + passwd);
         if (!passwd || passwd.length < 8)
             throw new Error("ValidationError");
 
