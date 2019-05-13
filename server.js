@@ -42,6 +42,7 @@ app.get('/users', async (req, res, next) => {
 
 app.post('/users', async (req, res, next) => {
     const user = new db.User(req.query);
+    console.log(req.query);
     user.struct.hashed_password = db.User.getHash(req.query.password)
     try {
         const newUsr = await user.submit();
