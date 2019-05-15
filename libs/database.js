@@ -167,9 +167,10 @@ class Device {
         if (this.struct.id) {
             // ToDo - EDIT feature
         } else {
-            const id = (await client.query('INSERT INTO devices ("id", "name", "owner_id") VALUES (DEFAULT, $1, $2) RETURNING ID', [
+            const id = (await client.query('INSERT INTO devices ("id", "name", "owner_id", "description") VALUES (DEFAULT, $1, $2, $3) RETURNING ID', [
                     this.struct.name,
-                    this.struct.owner_id
+                    this.struct.owner_id,
+                    this.struct.description
                 ])).rows[0].id;
             log.info(`Created device with id ${id}`)
             return (await Device.get(this.struct.owner_id, id));
