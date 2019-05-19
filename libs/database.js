@@ -182,7 +182,9 @@ class Device {
             try {
                 log.info(`Deleting device w/ ID ${did}`)
                 await client.query("DELETE FROM devices WHERE id = $1 AND owner_id = $2", [did, uid]);
-            } catch {
+            } catch (e) {
+                log.info("Fail to delete");
+                console.log(e);
                 return false;
             }
             log.info(`Deleted device w/ ID ${did}`);
