@@ -164,7 +164,7 @@ class Device {
             throw new Error("ValidationError");
         }
 
-        if (this.struct.id) {
+        if (this.struct.id && this.struct.id != 0) {
             // ToDo - EDIT feature
         } else {
             const id = (await client.query('INSERT INTO devices ("id", "name", "owner_id", "description") VALUES (DEFAULT, $1, $2, $3) RETURNING ID', [
