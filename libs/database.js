@@ -231,7 +231,13 @@ class DeviceProp {
         }
 
         if (this.struct.id) {
-            // ToDo - EDIT feature
+            const id = this.struct.id;
+            await client.query('UPDATE "public"."device_props" SET "value" = $3, "name" = %$2 WHERE "id" = $1', [ 
+                this.struct.name,
+                this.struct.value
+            ]);
+            log.info(`Edited device {id}`);
+            return (await DeviceProp.get(this.struct.device_id, id));
         } else {
             const id = (await client.query('INSERT INTO "public"."device_props" ("id", "device_id", "value", "name") VALUES (DEFAULT, $1, $2, $3) RETURNING id', [
                 this.struct.device_id,
