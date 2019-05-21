@@ -146,9 +146,6 @@ app.post('/users/:uid/devices/:did/props', async (req, res, next) => {
 });
 
 app.put('/users/:uid/devices/:did/props/:pid', async (req, res, next) => {
-    if (req.query)
-        req.body = req.query;
-
     const obj = req.body;
     obj.device_id = req.params.did;
     const deviceProp = new db.DeviceProp(obj);
