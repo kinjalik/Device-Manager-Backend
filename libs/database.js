@@ -266,6 +266,8 @@ class DeviceProp {
     }
 
     validate() {
+        console.log(Device.checkExists(this.struct.device_id));
+        console.log(this.struct && this.struct.device_id && this.struct.name && this.struct.value)
         return (this.struct && this.struct.device_id && this.struct.name && this.struct.value) 
             && Device.checkExists(this.struct.device_id);
         
