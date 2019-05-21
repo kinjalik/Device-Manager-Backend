@@ -232,7 +232,7 @@ class DeviceProp {
 
         if (this.struct.id) {
             const id = this.struct.id;
-            await client.query('UPDATE "public"."device_props" SET "value" = $3, "name" = %$2 WHERE "id" = $1', [ 
+            await client.query('UPDATE "public"."device_props" SET "value" = $3, "name" = $2 WHERE "id" = $1', [ 
                 this.struct.name,
                 this.struct.value
             ]);
