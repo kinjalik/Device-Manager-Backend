@@ -225,7 +225,7 @@ class DeviceProp {
     }
 
     async submit() {
-        if (!this.validate()) {
+        if (!await this.validate()) {
             console.log(this.struct)
             throw new Error("ValidationError");
         }
@@ -265,9 +265,9 @@ class DeviceProp {
         }
     }
 
-    validate() {
-        return (this.struct && this.struct.device_id && this.struct.name && this.struct.value) 
-            && await Device.checkExists(this.struct.device_id);
+    async validate() {
+        console.log(this.struct && this.struct.device_id && this.struct.name && this.struct.value)
+        return (this.struct && this.struct.device_id && this.struct.name && this.struct.value) ;
         
     }
 }
