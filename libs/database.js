@@ -266,7 +266,7 @@ class DeviceProp {
     }
 
     async validate() {
-        console.log(this.struct && this.struct.device_id && this.struct.name && this.struct.value)
+        console.log(this.struct)
         return (this.struct && this.struct.device_id && this.struct.name && this.struct.value) ;
         
     }
