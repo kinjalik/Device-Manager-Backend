@@ -166,7 +166,7 @@ class Device {
 
         if (this.struct.id && this.struct.id != 0) {
             const id = this.struct.id;
-            const s = `UPDATE "public"."devices" SET "name" = '${this.struct.name}', "description" = '${this.struct.description}' WHERE "id" = ${this.struct.id}`;
+            const s = `UPDATE "public"."devices" SET "name" = '${this.struct.name}', "description" = '${this.struct.description}' WHERE "id" = '${this.struct.id}'`;
             console.log(s);
             try {
                 await client.query(s)
