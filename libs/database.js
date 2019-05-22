@@ -165,7 +165,12 @@ class Device {
         }
 
         if (this.struct.id && this.struct.id != 0) {
-            // ToDo - EDIT feature
+            const id = this.struct.id;
+            const s = `UPDATE "public"."devices" SET "name" = '${this.struct.name}', "description" = '${this.struct.description}' WHERE "id" = ${id}`;
+            log.info(s);
+            log.info(await client.query(s));
+            log.info(`Edited device ${id}`);
+            return (await Device.get(this.struct.owner_id, this.struct.id));;
         } else {
             const id = (await client.query('INSERT INTO devices ("id", "name", "owner_id", "description") VALUES (DEFAULT, $1, $2, $3) RETURNING ID', [
                     this.struct.name,
@@ -196,7 +201,7 @@ class Device {
     }
 
     validate() {
-        return (this.struct && this.struct.owner_id && this.struct.name) && User.checkExists(this.struct.owner_id);
+        return (this.struct && this.struct.owner_id && this.struct.name);
     }
 
     static async checkExists(id) {
@@ -234,8 +239,8 @@ class DeviceProp {
             const id = this.struct.id;
             const s = `UPDATE "public"."device_props" SET "value" = '${this.struct.value}', "name" = '${this.struct.name}' WHERE "id" = '${this.struct.id}'`;
             log.info(s);
-            await client.query(s);
-            log.info(`Edited device {id}`);
+            log.info(await client.query(s));
+            log.info(`Edited device ${id}`);
             return (await DeviceProp.get(this.struct.device_id, id));
         } else {
             const id = (await client.query('INSERT INTO "public"."device_props" ("id", "device_id", "value", "name") VALUES (DEFAULT, $1, $2, $3) RETURNING id', [

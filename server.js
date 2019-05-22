@@ -111,6 +111,19 @@ app.post('/users/:uid/devices', async (req, res, next) => {
     }
 })
 
+app.put('/users/:uid/devices/:did/', async (req, res, next) => {
+    const obj = req.body;
+    obj.id = req.params.did;
+    const device = new db.Device(obj);
+    try {
+        const changedDevice = await device.submit();
+        res.send(changedDevice);
+    } catch (e) {
+        next(e);
+        return;
+    }
+});
+
 app.delete('/users/:uid/devices/:did', async (req, res, next) => {
     if (req.query)
         req.body = req.query;
