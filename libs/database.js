@@ -201,7 +201,7 @@ class Device {
     }
 
     validate() {
-        return (this.struct && this.struct.owner_id && this.struct.name);
+        return true;
     }
 
     static async checkExists(id) {
