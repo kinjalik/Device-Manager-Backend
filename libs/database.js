@@ -167,8 +167,12 @@ class Device {
         if (this.struct.id && this.struct.id != 0) {
             const id = this.struct.id;
             const s = `UPDATE "public"."devices" SET "name" = '${this.struct.name}', "description" = '${this.struct.description}' WHERE "id" = ${this.struct.id}`;
-            log.info(s);
-            log.info(await client.query(s));
+            console.log(s);
+            try {
+                await client.query(s)
+            } catch(e) {
+                console.log(e);
+            }
             log.info(`Edited device ${id}`);
             return (await Device.get(this.struct.owner_id, this.struct.id));;
         } else {
